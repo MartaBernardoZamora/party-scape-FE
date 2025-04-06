@@ -1,13 +1,9 @@
 import './App.css'
+import AppRouter from './routes/AppRouter'
 
 function App() {
   return (
-    <>
-      <h1>Party Escape</h1>
-      <p>
-        Juega con nosotros
-      </p>
-    </>
+    <AppRouter/>
   )
 }
 
