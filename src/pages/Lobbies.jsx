@@ -7,7 +7,8 @@ function Lobbies() {
     const [loading, setLoading] = useState(true);
     const [lobbyNewName, setLobbyNewName] = useState('');
     const [selectedLobby, setSelectedLobby] = useState('');
-    const [showModal, setShowModal] = useState(false);
+    const [view, setView] = useState('table');
+    const [showTable, setShowTable] = useState(true);
     const [action, setAccion] = useState('');
 
     const adminId = 1;//harcodeado a la espera de un login
@@ -39,7 +40,7 @@ function Lobbies() {
         setLobbyNewName('');
         setSelectedLobby('');
         setAccion('Crear');
-        setShowModal(true);
+        setView('form');
     }
     const createLobby = async () => {
         try {
@@ -54,7 +55,7 @@ function Lobbies() {
             const createdLobby = await response.json();
             setLobbies([...lobbies, createdLobby]);
             setLobbyNewName('');
-            setShowModal(false);
+            setView('table');
         } catch (error) {
             console.error('Error al crear la sala:', error);
         }
@@ -64,7 +65,7 @@ function Lobbies() {
         setLobbyNewName(lobby.name);
         setSelectedLobby(lobby);
         setAccion('Editar');
-        setShowModal(true);
+        setView('form');
     }
 
     const editLobby = async (lobby, lobbyNewName) => {
@@ -78,10 +79,9 @@ function Lobbies() {
                 })
             });
             const updatedLobby = await response.json();
-            console.log(updatedLobby);
             setLobbies(lobbies.map((l) => (l.id === updatedLobby.id ? updatedLobby : l)));
             setLobbyNewName('');
-            setShowModal(false);
+            setView('table');
         } catch (error) {
             console.error('Error al editar la sala:', error);
         }
@@ -103,14 +103,16 @@ function Lobbies() {
     return (
         <div>
             <h1>Gestionar salas</h1>
-            <LobbiesTable lobbies={lobbies} onCreate={handleCreateLobby} onEdit={handleEditLobby} onDelete={handleDeleteLobby} />
-            {showModal && (
+            {view === 'table' && <LobbiesTable lobbies={lobbies} onCreate={handleCreateLobby} onEdit={handleEditLobby} onDelete={handleDeleteLobby} />}
+            {view === 'form' && (
                 <LobbiesForm
                     action={action}
                     lobbyName={lobbyNewName}
                     setLobbyName={setLobbyNewName}
                     onSubmit={handleSubmit}
-                    onCancel={() => setShowModal(false)}
+                    onCancel={() => { 
+                        setView('table');
+                    }}
                 />
             )}
         </div>
