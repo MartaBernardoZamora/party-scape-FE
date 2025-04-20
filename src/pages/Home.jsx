@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import Button from '../components/utils/Button';
 
 function Home() {
     const navigate = useNavigate();
@@ -6,7 +7,7 @@ function Home() {
     return (
         <div>
             <h1>Home</h1>
-            <button onClick={() => navigate("/lobbies")}>Gestionar salas</button>
+            <Button text="Gestionar salas" onClick={() => navigate("/lobbies")} />
         </div>
     )
 }

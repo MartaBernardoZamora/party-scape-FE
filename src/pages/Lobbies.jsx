@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Button from '../components/utils/Button';
 
 function Lobbies() {
     const [lobbies, setLobbies] = useState([]);
@@ -31,7 +32,7 @@ function Lobbies() {
 
     const handleCreateLobby = () => {
         setLobbyNewName('');
-        setSelectedLobby(lobby);
+        setSelectedLobby('');
         setAccion('Crear');
         setShowModal(true);
     }
@@ -118,10 +119,10 @@ function Lobbies() {
                                 <td>{lobby.gameIds.length}</td>
                                 <td>{lobby.matchIds.length}</td>
                                 <td>
-                                    <button disabled>Crear partida</button>
-                                    <button title="Ver partidas" disabled>👀</button>
-                                    <button title="Editar esta sala" onClick={() => handleEditLobby(lobby)}>✏️​</button>
-                                    <button id="delete-button" title="Eliminar esta sala" onClick={() => handleDeleteLobby(lobby.id)}>❌​</button>
+                                    <Button text="Crear partida" onClick={() => console.log('Crear partida')} disabled/>{/*harcodeado a la espera del flujo de game*/}
+                                    <Button text="👀" onClick={() => console.log('Ver partidas')} title="Ver partidas" disabled/>{/*harcodeado a la espera del flujo de game*/}
+                                    <Button text="✏️" onClick={() => handleEditLobby(lobby)} title="Editar esta sala"/>
+                                    <Button text="❌​" onClick={() => handleDeleteLobby(lobby.id)} title="Eliminar esta sala"/>{/*harcodeado a la espera del flujo de game*/}
                                 </td>
                             </tr>
                         ))}
@@ -139,14 +140,14 @@ function Lobbies() {
                             onChange={(e) => setLobbyNewName(e.target.value)}
                         />
                         <div style={{ marginTop: 10 }}>
-                            <button onClick={() => {
+                            <Button text={action} onClick={() => {
                                 if (action === 'Crear') {
                                     createLobby();
                                 } else if (action === 'Editar') {
                                     editLobby(selectedLobby, lobbyNewName);
                                 }
-                            }}>{action}</button>
-                            <button onClick={() => setShowModal(false)}>Cancelar</button>
+                            }}/>
+                            <Button text="Cancelar" onClick={() => setShowModal(false)}/>
                         </div>
                     </div>
                 </div>
