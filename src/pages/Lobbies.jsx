@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Button from '../components/utils/Button';
+import LobbiesTable from '../components/lobbies/LobbiesTable';
+import LobbiesForm from '../components/lobbies/LobbiesForm';
 
 function Lobbies() {
     const [lobbies, setLobbies] = useState([]);
@@ -30,6 +31,10 @@ function Lobbies() {
 
     if (loading) return <p>Cargando salas...</p>;
 
+    const handleSubmit = () => {
+        if (action === 'Crear') createLobby();
+        else if (action === 'Editar') editLobby(selectedLobby, lobbyNewName);
+      };
     const handleCreateLobby = () => {
         setLobbyNewName('');
         setSelectedLobby('');
@@ -37,7 +42,6 @@ function Lobbies() {
         setShowModal(true);
     }
     const createLobby = async () => {
-        console.log(lobbyNewName);
         try {
             const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies`, {
                 method: 'POST',
@@ -64,7 +68,6 @@ function Lobbies() {
     }
 
     const editLobby = async (lobby, lobbyNewName) => {
-        console.log(lobbyNewName);
         try {
             const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies/${lobby.id}`, {
                 method: 'PUT',
@@ -75,6 +78,7 @@ function Lobbies() {
                 })
             });
             const updatedLobby = await response.json();
+            console.log(updatedLobby);
             setLobbies(lobbies.map((l) => (l.id === updatedLobby.id ? updatedLobby : l)));
             setLobbyNewName('');
             setShowModal(false);
@@ -99,58 +103,15 @@ function Lobbies() {
     return (
         <div>
             <h1>Gestionar salas</h1>
-            <button id="create-lobby-button" onClick={handleCreateLobby}>Crear nueva sala</button>
-            {lobbies.length === 0 ? (
-                <p>No hay salas disponibles.</p>
-            ) : (
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Juegos vinculados</th>
-                            <th>Partidas creadas</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {lobbies.map((lobby) => (
-                            <tr key={lobby.id}>
-                                <td>{lobby.name}</td>
-                                <td>{lobby.gameIds.length}</td>
-                                <td>{lobby.matchIds.length}</td>
-                                <td>
-                                    <Button text="Crear partida" onClick={() => console.log('Crear partida')} disabled/>{/*harcodeado a la espera del flujo de game*/}
-                                    <Button text="👀" onClick={() => console.log('Ver partidas')} title="Ver partidas" disabled/>{/*harcodeado a la espera del flujo de game*/}
-                                    <Button text="✏️" onClick={() => handleEditLobby(lobby)} title="Editar esta sala"/>
-                                    <Button text="❌​" onClick={() => handleDeleteLobby(lobby.id)} title="Eliminar esta sala"/>{/*harcodeado a la espera del flujo de game*/}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+            <LobbiesTable lobbies={lobbies} onCreate={handleCreateLobby} onEdit={handleEditLobby} onDelete={handleDeleteLobby} />
             {showModal && (
-                <div>
-                    <div>
-                        <h2>{action} sala</h2>
-                        <input
-                            type="text"
-                            placeholder="Nombre de la sala"
-                            value={lobbyNewName}
-                            onChange={(e) => setLobbyNewName(e.target.value)}
-                        />
-                        <div style={{ marginTop: 10 }}>
-                            <Button text={action} onClick={() => {
-                                if (action === 'Crear') {
-                                    createLobby();
-                                } else if (action === 'Editar') {
-                                    editLobby(selectedLobby, lobbyNewName);
-                                }
-                            }}/>
-                            <Button text="Cancelar" onClick={() => setShowModal(false)}/>
-                        </div>
-                    </div>
-                </div>
+                <LobbiesForm
+                    action={action}
+                    lobbyName={lobbyNewName}
+                    setLobbyName={setLobbyNewName}
+                    onSubmit={handleSubmit}
+                    onCancel={() => setShowModal(false)}
+                />
             )}
         </div>
     );
