@@ -8,8 +8,8 @@ function Lobbies() {
     const [lobbyNewName, setLobbyNewName] = useState('');
     const [selectedLobby, setSelectedLobby] = useState('');
     const [view, setView] = useState('table');
-    const [showTable, setShowTable] = useState(true);
     const [action, setAccion] = useState('');
+    const [preselectedGameIds, setPreselectedGameIds] = useState([]);
 
     const adminId = 1;//harcodeado a la espera de un login
 
@@ -32,9 +32,9 @@ function Lobbies() {
 
     if (loading) return <p>Cargando salas...</p>;
 
-    const handleSubmit = () => {
-        if (action === 'Crear') createLobby();
-        else if (action === 'Editar') editLobby(selectedLobby, lobbyNewName);
+    const handleSubmit = (formData) => {
+        if (action === 'Crear') createLobby(formData);
+        else if (action === 'Editar') editLobby(selectedLobby, formData);
       };
     const handleCreateLobby = () => {
         setLobbyNewName('');
@@ -42,14 +42,14 @@ function Lobbies() {
         setAccion('Crear');
         setView('form');
     }
-    const createLobby = async () => {
+    const createLobby = async (formData) => {
         try {
             const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: lobbyNewName,
-                    gameIds: [1, 2]//harcodeado a la espera del flujo de game
+                    name: formData.name,
+                    gameIds: formData.gameIds
                 })
             });
             const createdLobby = await response.json();
@@ -64,18 +64,19 @@ function Lobbies() {
     const handleEditLobby = (lobby) => {
         setLobbyNewName(lobby.name);
         setSelectedLobby(lobby);
+        setPreselectedGameIds(lobby.gameIds);
         setAccion('Editar');
         setView('form');
     }
 
-    const editLobby = async (lobby, lobbyNewName) => {
+    const editLobby = async (lobby, formData) => {
         try {
             const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies/${lobby.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: lobbyNewName,
-                    gameIds: [1, 2, 3]//harcodeado a la espera del flujo de game
+                    name: formData.name,
+                    gameIds: formData.gameIds
                 })
             });
             const updatedLobby = await response.json();
@@ -113,6 +114,7 @@ function Lobbies() {
                     onCancel={() => { 
                         setView('table');
                     }}
+                    initialSelectedGames={preselectedGameIds}
                 />
             )}
         </div>
