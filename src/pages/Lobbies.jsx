@@ -38,7 +38,8 @@ function Lobbies() {
       };
     const handleCreateLobby = () => {
         setLobbyNewName('');
-        setSelectedLobby('');
+        setSelectedLobby('');        
+        setPreselectedGameIds([]);
         setAccion('Crear');
         setView('form');
     }
@@ -107,6 +108,7 @@ function Lobbies() {
             {view === 'table' && <LobbiesTable lobbies={lobbies} onCreate={handleCreateLobby} onEdit={handleEditLobby} onDelete={handleDeleteLobby} />}
             {view === 'form' && (
                 <LobbiesForm
+                    key={action === 'Crear' ? 'new' : selectedLobby?.id}
                     action={action}
                     lobbyName={lobbyNewName}
                     setLobbyName={setLobbyNewName}
