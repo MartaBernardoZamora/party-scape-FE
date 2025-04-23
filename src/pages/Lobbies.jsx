@@ -74,7 +74,6 @@ function Lobbies() {
         }
     };
     const createMatch = async (lobby) => {
-        console.log(lobby);
         try {
             const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches`, {
                 method: 'POST',
@@ -84,7 +83,6 @@ function Lobbies() {
                 })
             });
             const newMatch = await response.json();
-            console.log(newMatch);
             setMatch(newMatch);
             return newMatch;
         } catch (error) {

@@ -46,6 +46,7 @@ function Matches() {
 
     if (loading) return <p>Cargando sala...</p>;
     if (!lobby) return <p>No se pudo cargar la sala.</p>;
+    if (matches.length === 0) return <p>No hay partidas en esta sala.</p>;
     return (
         <>
             <h1>Partidas de la sala {lobby.name}</h1>
