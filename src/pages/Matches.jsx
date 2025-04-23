@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import MatchesTable from '../components/matches/MatchesTable'
+import Button from '../components/utils/Button'
 
 function Matches() {
     const { lobbyId } = useParams();
@@ -50,6 +51,7 @@ function Matches() {
     return (
         <>
             <h1>Partidas de la sala {lobby.name}</h1>
+            <Button text="Volver" onClick={() => window.history.back()}/>
             <MatchesTable matches = {matches} onDeleteMatch={handleDeleteMatch}/>
         </>
     )
