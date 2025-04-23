@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LobbiesTable from '../components/lobbies/LobbiesTable';
 import LobbiesForm from '../components/lobbies/LobbiesForm';
 
@@ -10,6 +11,7 @@ function Lobbies() {
     const [view, setView] = useState('table');
     const [action, setAccion] = useState('');
     const [preselectedGameIds, setPreselectedGameIds] = useState([]);
+    const navigate = useNavigate();
 
     const adminId = 1;//harcodeado a la espera de un login
 
@@ -61,6 +63,13 @@ function Lobbies() {
             console.error('Error al crear la sala:', error);
         }
     };
+    const handleViewMatches = (lobbyId) => {
+        navigate(`/lobbies/${lobbyId}/matches`);
+    };
+    
+    const handleCreateMatch = (lobbyId) => {
+        navigate(`/lobbies/${lobbyId}/crear-partida`);
+    };
 
     const handleEditLobby = (lobby) => {
         setLobbyNewName(lobby.name);
@@ -105,7 +114,16 @@ function Lobbies() {
     return (
         <div>
             <h1>Gestionar salas</h1>
-            {view === 'table' && <LobbiesTable lobbies={lobbies} onCreate={handleCreateLobby} onEdit={handleEditLobby} onDelete={handleDeleteLobby} />}
+            {view === 'table' && 
+                <LobbiesTable 
+                    lobbies={lobbies} 
+                    onCreate={handleCreateLobby} 
+                    onEdit={handleEditLobby} 
+                    onDelete={handleDeleteLobby}
+                    onViewMatches={handleViewMatches}
+                    onCreateMatch={handleCreateMatch}
+                />
+            }
             {view === 'form' && (
                 <LobbiesForm
                     key={action === 'Crear' ? 'new' : selectedLobby?.id}
