@@ -11,6 +11,7 @@ function Lobbies() {
     const [view, setView] = useState('table');
     const [action, setAccion] = useState('');
     const [preselectedGameIds, setPreselectedGameIds] = useState([]);
+    const [match, setMatch] = useState('');
     const navigate = useNavigate();
 
     const adminId = 1;//harcodeado a la espera de un login
@@ -20,7 +21,6 @@ function Lobbies() {
             try {
                 const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies`);
                 const data = await response.json();
-                console.log(data);
                 setLobbies(data);
             } catch (error) {
                 console.error('Error al obtener los lobbies:', error);
@@ -67,10 +67,31 @@ function Lobbies() {
         navigate(`/lobbies/${lobbyId}/matches`);
     };
     
-    const handleCreateMatch = (lobbyId) => {
-        navigate(`/lobbies/${lobbyId}/crear-partida`);
+    const handleCreateMatch = async (lobby) => {
+        console.log(lobby);
+        const newMatch = await createMatch(lobby);
+        if (newMatch) {
+            navigate(`/matches/${newMatch.id}/admin`, { state: { match: newMatch } });
+        }
     };
-
+    const createMatch = async (lobby) => {
+        console.log(lobby);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    lobbyId: lobby
+                })
+            });
+            const newMatch = await response.json();
+            console.log(newMatch);
+            setMatch(newMatch);
+            return newMatch;
+        } catch (error) {
+            console.error('Error al crear la partida:', error);
+        }
+    }
     const handleEditLobby = (lobby) => {
         setLobbyNewName(lobby.name);
         setSelectedLobby(lobby);
