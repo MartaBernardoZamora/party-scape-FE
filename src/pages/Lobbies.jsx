@@ -68,7 +68,6 @@ function Lobbies() {
     };
     
     const handleCreateMatch = async (lobby) => {
-        console.log(lobby);
         const newMatch = await createMatch(lobby);
         if (newMatch) {
             navigate(`/matches/${newMatch.id}/admin`, { state: { match: newMatch } });

@@ -27,7 +27,7 @@ function Matches() {
             }
         };
         fetchLobby();
-    }, [lobbyId, matches]);
+    }, [lobbyId]);
     
 
     const handleDeleteMatch = async (matchId) => {
