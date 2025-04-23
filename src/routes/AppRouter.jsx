@@ -4,6 +4,7 @@ import Home from '../pages/Home'
 import Lobbies from '../pages/Lobbies'
 import Matches from '../pages/Matches'
 import AdminMatch from '../pages/AdminMatch'
+import JoinMatch from '../pages/JoinMatch'
 
 function AppRouter() {
     return (
@@ -13,7 +14,7 @@ function AppRouter() {
                 <Route path="/lobbies" element={<Lobbies />} />
                 <Route path="/lobbies/:lobbyId/matches" element={<Matches />} />
                 <Route path="/matches/:matchId/admin" element={<AdminMatch />} />
-                {/* <Route path="/matches/:matchId/player" element={<JoinMatch />} />*/}
+                <Route path="/matches" element={<JoinMatch />} />
             </Route>
         </Routes>
     )
