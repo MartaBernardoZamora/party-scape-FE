@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 import Button from '../components/utils/Button';
+import MatchWebSocket from '../services/MatchWebSocket';
+
 
 function AdminMatch() {
     const adminId = 1; // Harcoded admin ID
@@ -23,6 +25,16 @@ function AdminMatch() {
         }
         fetchMatch();
     }, []);
+    useEffect(() => {
+        const socket = MatchWebSocket((data) => {
+          // lógica específica para admin
+          if (data.type === "NEW_PLAYER_JOINED") {
+            // actualiza vista de admin
+          }
+        });
+      
+        return () => socket.close();
+      }, []);
     const handleCancelMatch = async () => {
         const confirmacion = window.confirm('¿Estas seguro de que quieres cancelar esta partida?');
         if (confirmacion) {
