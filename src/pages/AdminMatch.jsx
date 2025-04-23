@@ -9,9 +9,10 @@ function AdminMatch() {
     const { matchId } = useParams();
     const [match, setMatch] = useState();
     const [loading, setLoading] = useState(true);
+    const [messages, setMessages] = useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {        
+    useEffect(() => {
         const fetchMatch = async () => {
             try {
                 const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches/${matchId}`);
@@ -19,26 +20,26 @@ function AdminMatch() {
                 setMatch(data);
             } catch (error) {
                 console.error('Error al cargar la partida:', error);
-            }finally {
+            } finally {
                 setLoading(false);
             }
         }
         fetchMatch();
     }, []);
     useEffect(() => {
-        const socket = MatchWebSocket((data) => {
-          // lógica específica para admin
-          if (data.type === "NEW_PLAYER_JOINED") {
-            // actualiza vista de admin
-          }
+        const socket = MatchWebSocket(matchId, (data) => {
+            if (data.type === "NEW_PLAYER_JOINED") {
+                setMessages((prev) => [...prev, { playerName: data.payload.playerName }]);
+            }
         });
-      
+
         return () => socket.close();
-      }, []);
+    }, [matchId]);
+
     const handleCancelMatch = async () => {
         const confirmacion = window.confirm('¿Estas seguro de que quieres cancelar esta partida?');
         if (confirmacion) {
-            const cancelled= await cancelMatch();
+            const cancelled = await cancelMatch();
             if (cancelled) {
                 navigate('/lobbies');
             }
@@ -68,9 +69,15 @@ function AdminMatch() {
             <h1>Administrar partida</h1>
             <p>Código de acceso: {match.joinCode}</p>
             <p>Estado: {match.status}</p>
-            <Button text="⏏️​" onClick={() => handleCancelMatch()} title="Cancelar partida"/>
-            <Button text="▶️​" onClick={() => console.log("arranco")} title="Iniciar partida"/>
-            <Button text="​⏹️​" onClick={() => console.log("termino")} title="Terminar y guardar datos de partida"/>
+            <p><b>Jugadores:</b></p>
+            <ul>
+                {messages.map((p, i) => (
+                    <li key={i}>{p.playerName}</li>
+                ))}
+            </ul>
+            <Button text="⏏️​" onClick={() => handleCancelMatch()} title="Cancelar partida" />
+            <Button text="▶️​" onClick={() => console.log("arranco")} title="Iniciar partida" />
+            <Button text="​⏹️​" onClick={() => console.log("termino")} title="Terminar y guardar datos de partida" />
         </>
     )
 }

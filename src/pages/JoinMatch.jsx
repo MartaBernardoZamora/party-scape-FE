@@ -8,22 +8,35 @@ function JoinMatch() {
 
     const [code, setCode] = useState("");
     const [name, setName] = useState("");
+    const adminId = 1; // Harcoded admin ID
 
-    const handleClickPartidas = () => {
-        const socket = new WebSocket("ws://localhost:8080/api/v1/ws-matches");
 
-        socket.onopen = () => {
-            socket.send(JSON.stringify({
-                type: "NEW_PLAYER_JOINED",
-                payload: {
-                    matchCode: code,
-                    playerName: name
-                }
-            }));
-        };    
+    const handleClickPartidas = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches?code=${code}`);
 
-        navigate(`/matches/${code}/player`, { state: { name } });
-    }
+            if (!response.ok) {
+                alert("No se encontró la partida con ese código");
+                return;
+            }
+
+            const matchData = await response.json();
+
+            const socket = new WebSocket(`ws://localhost:8080/api/v1/ws-matches?match=${matchData.id}`);
+            socket.onopen = () => {
+                socket.send(JSON.stringify({
+                    type: "NEW_PLAYER_JOINED",
+                    payload: {
+                        playerName: name
+                    }
+                }));
+            };
+
+        } catch (error) {
+            console.error("Error al unirse a la partida:", error);
+        }
+        navigate(`/matches/${code}/player`);
+    };
     return (
         <div>
             <h1>Unirse a partida</h1>
