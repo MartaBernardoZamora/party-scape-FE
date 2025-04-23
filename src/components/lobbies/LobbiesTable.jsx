@@ -1,5 +1,3 @@
-
-import React, { useEffect, useState } from 'react';
 import Button from '../utils/Button';
 
 function LobbiesTable(props) {
@@ -26,9 +24,9 @@ function LobbiesTable(props) {
                                 <td>{lobby.matchIds.length}</td>
                                 <td>
                                     <Button text="Crear partida" onClick={() => console.log('Crear partida')} disabled/>{/*harcodeado a la espera del flujo de game*/}
-                                    <Button text="👀" onClick={() => console.log('Ver partidas')} title="Ver partidas" disabled/>{/*harcodeado a la espera del flujo de game*/}
+                                    <Button text="👀" onClick={() => props.onViewMatches(lobby.id)} title="Ver partidas"/>{/*harcodeado a la espera del flujo de game*/}
                                     <Button text="✏️" onClick={() => props.onEdit(lobby)} title="Editar esta sala"/>
-                                    <Button text="❌​" onClick={() => props.onDelete(lobby.id)} title="Eliminar esta sala"/>{/*harcodeado a la espera del flujo de game*/}
+                                    <Button text="❌​" onClick={() => props.onDelete(lobby.id)} title="Eliminar esta sala"/>
                                 </td>
                             </tr>
                         ))}
