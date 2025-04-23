@@ -23,8 +23,8 @@ function LobbiesTable(props) {
                                 <td>{lobby.gameIds.length}</td>
                                 <td>{lobby.matchIds.length}</td>
                                 <td>
-                                    <Button text="Crear partida" onClick={() => console.log('Crear partida')} disabled/>{/*harcodeado a la espera del flujo de game*/}
-                                    <Button text="👀" onClick={() => props.onViewMatches(lobby.id)} title="Ver partidas"/>{/*harcodeado a la espera del flujo de game*/}
+                                    <Button text="Crear partida" onClick={() => props.onCreateMatch(lobby.id)}/>{/*harcodeado a la espera del flujo de game*/}
+                                    <Button text="👀" onClick={() => props.onViewMatches(lobby.id)} title="Ver partidas"/>
                                     <Button text="✏️" onClick={() => props.onEdit(lobby)} title="Editar esta sala"/>
                                     <Button text="❌​" onClick={() => props.onDelete(lobby.id)} title="Eliminar esta sala"/>
                                 </td>
