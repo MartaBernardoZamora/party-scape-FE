@@ -1,10 +1,13 @@
 let socket;
 
 function MatchWebSocket(matchId, onMessage) {
+  
   socket = new WebSocket(`ws://localhost:8080/api/v1/ws-matches?match=${matchId}`);
 
   socket.onopen = () => console.log("WebSocket conectado");
   socket.onmessage = (event) => {
+    console.log("📨 Mensaje recibido bruto:", event.data); // 👈 añade esto
+
     const data = JSON.parse(event.data);
     if (onMessage) onMessage(data);
   };

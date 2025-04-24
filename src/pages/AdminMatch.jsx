@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 import Button from '../components/utils/Button';
-import MatchWebSocket from '../services/MatchWebSocket';
+import { useWebSocketContext } from '../contexts/WebSocketContext';
 
 
 function AdminMatch() {
@@ -9,8 +9,9 @@ function AdminMatch() {
     const { matchId } = useParams();
     const [match, setMatch] = useState();
     const [loading, setLoading] = useState(true);
-    const [messages, setMessages] = useState([]);
     const navigate = useNavigate();
+    const [players, setPlayers] = useState([]);
+    const { connect, send, close } = useWebSocketContext();
 
     useEffect(() => {
         const fetchMatch = async () => {
@@ -26,15 +27,20 @@ function AdminMatch() {
         }
         fetchMatch();
     }, []);
+
+    console.log(matchId);
+
     useEffect(() => {
-        const socket = MatchWebSocket(matchId, (data) => {
+        const socket = connect(matchId, (data) => {
+            console.log("🎯 Recibido:", JSON.stringify(data, null, 2));
             if (data.type === "NEW_PLAYER_JOINED") {
-                setMessages((prev) => [...prev, { playerName: data.payload.playerName }]);
+                setPlayers(prev => [...prev, data.payload]); // payload debe tener { playerName }
             }
         });
 
-        return () => socket.close();
+        return () => close();
     }, [matchId]);
+
 
     const handleCancelMatch = async () => {
         const confirmacion = window.confirm('¿Estas seguro de que quieres cancelar esta partida?');
@@ -71,7 +77,7 @@ function AdminMatch() {
             <p>Estado: {match.status}</p>
             <p><b>Jugadores:</b></p>
             <ul>
-                {messages.map((p, i) => (
+                {players.map((p, i) => (
                     <li key={i}>{p.playerName}</li>
                 ))}
             </ul>

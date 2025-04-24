@@ -1,10 +1,13 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Button from "../components/utils/Button"
+import { useWebSocketContext } from "../contexts/WebSocketContext"
 
 
 function JoinMatch() {
     const navigate = useNavigate();
+
+    const { send, connect } = useWebSocketContext();
 
     const [code, setCode] = useState("");
     const [name, setName] = useState("");
@@ -22,20 +25,32 @@ function JoinMatch() {
 
             const matchData = await response.json();
 
-            const socket = new WebSocket(`ws://localhost:8080/api/v1/ws-matches?match=${matchData.id}`);
-            socket.onopen = () => {
-                socket.send(JSON.stringify({
-                    type: "NEW_PLAYER_JOINED",
-                    payload: {
-                        playerName: name
-                    }
-                }));
-            };
+            const socket = connect(matchData.id, (data) => {
+                console.log("📩 Mensaje recibido (jugador):", data);
+              });
+          
+              await new Promise((resolve) => {
+                if (socket.readyState === WebSocket.OPEN) {
+                  resolve();
+                } else {
+                  socket.onopen = () => {
+                    console.log("✅ WebSocket abierto (jugador)");
+                    resolve();
+                  };
+                }
+              });
+              
+              // Ahora ya puedes enviar el mensaje con seguridad
+              socket.send(JSON.stringify({
+                type: "NEW_PLAYER_JOINED",
+                payload: { playerName: name }
+              }));
+
+            navigate(`/matches/${code}/player`, { state: matchData.id });
 
         } catch (error) {
             console.error("Error al unirse a la partida:", error);
         }
-        navigate(`/matches/${code}/player`);
     };
     return (
         <div>

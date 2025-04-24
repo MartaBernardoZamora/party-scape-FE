@@ -1,9 +1,12 @@
 import './App.css'
 import AppRouter from './routes/AppRouter'
+import { WebSocketProvider } from './contexts/WebSocketContext'
 
 function App() {
   return (
-    <AppRouter/>
+    <WebSocketProvider>
+      <AppRouter/>
+    </WebSocketProvider>
   )
 }
 
