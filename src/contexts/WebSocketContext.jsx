@@ -5,12 +5,11 @@ const WebSocketContext = createContext();
 export const WebSocketProvider = ({ children }) => {
     const socketRef = useRef(null);
 
-    const connect = (matchId, onMessage) => {
+    const connect = (matchId, onMessage, onOpen) => {
         if (
           socketRef.current &&
           (socketRef.current.readyState === WebSocket.OPEN || socketRef.current.readyState === WebSocket.CONNECTING)
         ) {
-          console.log("♻️ Cerrando WebSocket anterior");
           socketRef.current.close();
         }
       
@@ -18,20 +17,17 @@ export const WebSocketProvider = ({ children }) => {
         socketRef.current = socket;
       
         socket.onopen = () => {
-          console.log("✅ WebSocket conectado");
+          if (onOpen) onOpen();
         };
       
         socket.onmessage = (event) => {
-          console.log("📨 Mensaje recibido bruto:", event.data);
           const data = JSON.parse(event.data);
           if (onMessage) onMessage(data);
         };
       
-        socket.onerror = (e) => console.error("❌ WebSocket error:", e);
+        socket.onerror = (e) => console.error("WebSocket error:", e);
       
-        socket.onclose = () => {
-          console.log("🔌 WebSocket cerrado");
-        };
+        socket.onclose = () => {};
       
         return socket;
       };
@@ -50,10 +46,7 @@ export const WebSocketProvider = ({ children }) => {
         if (!socket) return;
       
         if (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING) {
-          console.log("⛔ Cerrando WebSocket");
           socket.close();
-        } else {
-          console.log("🟡 WebSocket ya cerrado o en cierre");
         }
       };
 
