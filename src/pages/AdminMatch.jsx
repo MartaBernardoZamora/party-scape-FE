@@ -32,11 +32,18 @@ function AdminMatch() {
 
     useEffect(() => {
         const socket = connect(matchId, (data) => {
-            console.log("🎯 Recibido:", JSON.stringify(data, null, 2));
+
+            if (data.type === "PLAYER_LIST") {
+                setPlayers(data.payload);
+            }
             if (data.type === "NEW_PLAYER_JOINED") {
-                setPlayers(prev => [...prev, data.payload]); // payload debe tener { playerName }
+                send({ type: "GET_PLAYERS" });
             }
         });
+
+        socket.onopen = () => {
+            send({ type: "GET_PLAYERS" });
+        };
 
         return () => close();
     }, [matchId]);
