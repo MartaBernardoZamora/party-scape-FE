@@ -10,7 +10,6 @@ function PlayRoom() {
   const [ComponenteJuego, setComponenteJuego] = useState(null);
 
   useEffect(() => {
-    // Configuramos el canvas inicial
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const alto = 200;
@@ -37,7 +36,7 @@ function PlayRoom() {
     }
   }, [nombreJuego]);
   const submitAnswer = () => {
-    if (respuesta.toLowerCase() === respuestaOk) {
+    if (respuesta?.toLowerCase() === respuestaOk) {
       const ahora = new Date();
       console.log(ahora);
     } else {
