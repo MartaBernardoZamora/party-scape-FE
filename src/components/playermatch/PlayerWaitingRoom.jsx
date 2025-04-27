@@ -16,6 +16,10 @@ function PlayerWaitingRoom(props) {
         if (data.type === "NEW_PLAYER_JOINED") {
           send({ type: "GET_PLAYERS" });
         }
+        if(data.type === "START_MATCH") {
+          console.log("Partida empezada");
+          if (props.onStartMatch) props.onStartMatch();
+        }
       },
       () => {
         send({ type: "GET_PLAYERS" });
