@@ -1,13 +1,17 @@
 import { useEffect, useState, useRef, Suspense, lazy} from 'react';
 import Button from '../utils/Button';
+import { useWebSocketContext } from '../../contexts/WebSocketContext';
 
-function PlayRoom() {
+function PlayRoom(props) {
   const canvasRef = useRef(null);
   const [respuestaOk, setRespuestaOk] = useState(null);
   const [respuesta, setRespuesta] = useState(null);
   const juegos = import.meta.glob('../games/*.jsx');
   const [nombreJuego, setNombreJuego] = useState(null);
   const [ComponenteJuego, setComponenteJuego] = useState(null);
+
+  const { send, connect, close } = useWebSocketContext();
+
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -35,14 +39,30 @@ function PlayRoom() {
       }
     }
   }, [nombreJuego]);
+  useEffect(() => {
+    const socket = connect(props.matchId,() => {});
+    
+    return () => {
+      close();
+    };
+  }, [props.matchId, connect, close]);
   const submitAnswer = () => {
     if (respuesta?.toLowerCase() === respuestaOk) {
       const ahora = new Date();
-      console.log(ahora);
+      props.onVictory(ahora);
+
+      send({
+        type: "PLAYER_VICTORY",
+        payload: {
+          playerName: props.playerName,
+          finalTime: ahora.toISOString()
+        }
+      });
+
     } else {
       alert('Respuesta incorrecta');
     }
-  }
+  };
   return (
     <>
       {ComponenteJuego && (
