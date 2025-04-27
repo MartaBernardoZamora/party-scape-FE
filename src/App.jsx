@@ -1,13 +1,12 @@
 import './App.css'
+import AppRouter from './routes/AppRouter'
+import { WebSocketProvider } from './contexts/WebSocketContext'
 
 function App() {
   return (
-    <>
-      <h1>Party Escape</h1>
-      <p>
-        Juega con nosotros
-      </p>
-    </>
+    <WebSocketProvider>
+      <AppRouter/>
+    </WebSocketProvider>
   )
 }
 
