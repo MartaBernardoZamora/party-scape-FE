@@ -54,7 +54,7 @@ function PlayerResultRoom({ matchId, finalTime }) {
       <ol>
         {results.map((r, index) => (
           <li key={index}>
-            {r.playerName} - {calculateTimeSpent(match.startDatetime, r.finalTime)}
+            {r.playerName} - {match ? calculateTimeSpent(match.startDatetime, r.finalTime): "Cargando..."}
           </li>
         ))}
       </ol>
