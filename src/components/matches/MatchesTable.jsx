@@ -23,7 +23,7 @@ function MatchesTable(props) {
                             <td>{match.joinCode}</td>
                             <td>{match.status}</td>
                             <td>
-                                <Button text="👀" onClick={() => console.log('Ver datos')} title="Ver datos" disabled={match.status !== 'FINISHED'}/>
+                                <Button text="👀" onClick={() => console.log('Ver datos')} title="Ver datos" disabled = {true}/>
                                 <Button text="❌" onClick={() => props.onDeleteMatch(match.id)} title="Eliminar partida" />
                             </td>
                         </tr>
