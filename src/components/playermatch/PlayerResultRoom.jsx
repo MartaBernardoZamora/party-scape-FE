@@ -25,7 +25,7 @@ function PlayerResultRoom({ matchId, finalTime }) {
       
         const fetchMatch = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches/${matchId}`);
+                const response = await fetch(`http://localhost:8080/api/v1/match-profiles/${matchId}`);
                 const data = await response.json();
                 setMatch(data);
             } catch (error) {
