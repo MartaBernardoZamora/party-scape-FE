@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useWebSocketContext } from '../../contexts/WebSocketContext';
 
 function PlayerWaitingRoom(props) {
@@ -17,7 +17,6 @@ function PlayerWaitingRoom(props) {
           send({ type: "GET_PLAYERS" });
         }
         if(data.type === "START_MATCH") {
-          console.log("Partida empezada");
           if (props.onStartMatch) props.onStartMatch();
         }
       },
