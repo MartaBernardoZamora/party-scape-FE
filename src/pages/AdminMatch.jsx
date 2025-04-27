@@ -28,8 +28,6 @@ function AdminMatch() {
         fetchMatch();
     }, []);
 
-    console.log(matchId);
-
     useEffect(() => {
         const socket = connect(matchId, (data) => {
 
@@ -48,7 +46,9 @@ function AdminMatch() {
         return () => close();
     }, [matchId]);
 
-
+    const handleStartMatch = () => {
+        send({ type: "START_MATCH" });
+    }
     const handleCancelMatch = async () => {
         const confirmacion = window.confirm('¿Estas seguro de que quieres cancelar esta partida?');
         if (confirmacion) {
@@ -89,7 +89,7 @@ function AdminMatch() {
                 ))}
             </ul>
             <Button text="⏏️​" onClick={() => handleCancelMatch()} title="Cancelar partida" />
-            <Button text="▶️​" onClick={() => console.log("arranco")} title="Iniciar partida" />
+            <Button text="▶️​" onClick={() => handleStartMatch()} title="Iniciar partida" />
             <Button text="​⏹️​" onClick={() => console.log("termino")} title="Terminar y guardar datos de partida" />
         </>
     )
