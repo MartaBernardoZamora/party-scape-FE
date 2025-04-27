@@ -46,27 +46,32 @@ function AdminMatch() {
         return () => close();
     }, [matchId]);
 
-    const handleStartMatch = () => {
+    const handleStartMatch = async() => {
+        await changeStatusMatch("IN_PROGRESS");
         send({ type: "START_MATCH" });
     }
     const handleCancelMatch = async () => {
         const confirmacion = window.confirm('¿Estas seguro de que quieres cancelar esta partida?');
         if (confirmacion) {
-            const cancelled = await cancelMatch();
+            const cancelled = await changeStatusMatch("CANCELLED");
             if (cancelled) {
                 navigate('/lobbies');
             }
         }
     }
-    const cancelMatch = async () => {
+    const changeStatusMatch = async (statusName) => {
         try {
             await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches/${matchId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    status: 'CANCELLED'
+                    status: statusName
                 })
             });
+            setMatch(prev => ({
+                ...prev,
+                status: statusName
+            }));
             return true;
         } catch (error) {
             console.error('Error al actualizar estado de la partida:', error);
