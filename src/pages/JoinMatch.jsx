@@ -24,7 +24,12 @@ function JoinMatch() {
       }
 
       const matchData = await response.json();
+      console.log(matchData.status);
 
+      if(matchData.status !== "CREATED") {
+        alert("La partida ya ha comenzado");
+        return;
+      }
       const socket = connect(matchData.id, (data) => { });
 
       await new Promise((resolve) => {
