@@ -11,6 +11,7 @@ function AdminMatch() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [players, setPlayers] = useState([]);
+    const [results, setResults] = useState([]);
     const { connect, send, close } = useWebSocketContext();
 
     useEffect(() => {
@@ -37,6 +38,9 @@ function AdminMatch() {
             if (data.type === "NEW_PLAYER_JOINED") {
                 send({ type: "GET_PLAYERS" });
             }
+            if (data.type === "PLAYER_VICTORY") {
+                setResults((prevResults) => [...prevResults, data.payload]);
+            }
         });
 
         socket.onopen = () => {
@@ -46,7 +50,7 @@ function AdminMatch() {
         return () => close();
     }, [matchId]);
 
-    const handleStartMatch = async() => {
+    const handleStartMatch = async () => {
         await changeStatusMatch("IN_PROGRESS");
         send({ type: "START_MATCH" });
     }
@@ -89,9 +93,15 @@ function AdminMatch() {
             <p>Estado: {match.status}</p>
             <p><b>Jugadores:</b></p>
             <ul>
-                {players.map((p, i) => (
-                    <li key={i}>{p.playerName}</li>
-                ))}
+                {players.map((player, index) => {
+                    const playerResult = results.find((r) => r.playerName === player.playerName);
+
+                    return (
+                        <li key={index}>
+                            {player.playerName} - {playerResult && new Date(playerResult.finalTime).toLocaleTimeString()}
+                        </li>
+                    );
+                })}
             </ul>
             <Button text="⏏️​" onClick={() => handleCancelMatch()} title="Cancelar partida" />
             <Button text="▶️​" onClick={() => handleStartMatch()} title="Iniciar partida" />
