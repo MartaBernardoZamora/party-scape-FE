@@ -1,12 +1,48 @@
-# React + Vite
+#PartyEscape - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend de **PartyEscape**, una aplicación de juegos personalizados para eventos, estilo escape room.
 
-Currently, two official plugins are available:
+Esta parte del proyecto está desarrollada en **React** y tiene como objetivo ofrecer una experiencia ágil y divertida en dispositivos móviles y web.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologías principales
 
-## Expanding the ESLint configuration
+- React
+- Vite
+- React Router
+- Mkcert
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Instalación
+
+1. Clona el repositorio:
+    `git clone https://github.com/MartaBernardoZamora/party-scape-FE.git`
+    
+2. Instala las dependencias:
+    
+    ```bash    
+    npm install
+    npm install react-router-dom
+    npm install vite-plugin-mkcert --save-dev
+    ```
+    
+
+## Conexión con el backend
+
+El frontend se conecta al backend Java (Spring Boot) en `http://localhost:8080/api/v1`.  
+Asegúrate de que el backend esté corriendo antes de iniciar la app.
+
+## Estado actual del proyecto
+
+-  Sistema de salas (Lobbies)
+    
+-  Creación y edición de partidas
+    
+-  Gestión de usuarios
+    
+-  Sistema de puntuaciones
+    
+-  Catálogo de minijuegos (próximamente)
+    
+
+## Sobre mi
+
+[Marta Bernardo: Github](https://github.com/MartaBernardoZamora)
