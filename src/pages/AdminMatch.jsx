@@ -63,14 +63,51 @@ function AdminMatch() {
             }
         }
     }
+    const handleFinishMatch = async () => {
+        const confirmacion = window.confirm('¿Estas seguro de que quieres finalizar esta partida?');
+        if (confirmacion) {
+            const finished = await changeStatusMatch("FINISHED");
+
+            if (finished) {
+                navigate('/lobbies');
+            }
+        }
+    }
     const changeStatusMatch = async (statusName) => {
         try {
+            const body = {
+                status: statusName,
+            };
+    
+            if (statusName === "FINISHED") {
+                const partidaFinalizada = new Date();
+    
+                const finishedPlayers = results.map(result => ({
+                    playerName: result.playerName,
+                    finalTime: result.finalTime,
+                    finished: true,
+                }));
+    
+                const allPlayerNames = players.map(p => p.playerName);
+    
+                const resultsPlayerNames = results.map(r => r.playerName);
+    
+                const unfinishedPlayers = allPlayerNames
+                    .filter(playerName => !resultsPlayerNames.includes(playerName))
+                    .map(playerName => ({
+                        playerName,
+                        finalTime: partidaFinalizada.toISOString(),
+                        finished: false,
+                    }));
+    
+                const completeResults = [...finishedPlayers, ...unfinishedPlayers];
+    
+                body.results = completeResults;
+            }
             await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches/${matchId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    status: statusName
-                })
+                body: JSON.stringify(body)
             });
             setMatch(prev => ({
                 ...prev,
@@ -105,7 +142,7 @@ function AdminMatch() {
             </ul>
             <Button text="⏏️​" onClick={() => handleCancelMatch()} title="Cancelar partida" />
             <Button text="▶️​" onClick={() => handleStartMatch()} title="Iniciar partida" />
-            <Button text="​⏹️​" onClick={() => console.log("termino")} title="Terminar y guardar datos de partida" />
+            <Button text="​⏹️​" onClick={() => handleFinishMatch()} title="Terminar y guardar datos de partida" />
         </>
     )
 }
