@@ -9,7 +9,7 @@ function LobbiesForm(props) {
     useEffect(() => {
         const fetchGames = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/games`);
+                const response = await fetch(`https://party-scape-be.onrender.com/api/v1/games`);
                 const data = await response.json();
                 setGames(data);
                 if (props.initialSelectedGames?.length > 0) {

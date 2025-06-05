@@ -14,11 +14,11 @@ function Matches() {
     useEffect(() => {
         const fetchLobby = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies/${lobbyId}`);
+                const response = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/lobbies/${lobbyId}`);
                 const data = await response.json();
                 setLobby(data);
 
-                const matchesResponse = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches?lobbyId=${lobbyId}`);
+                const matchesResponse = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/matches?lobbyId=${lobbyId}`);
                 const matchesData = await matchesResponse.json();
                 setMatches(matchesData);
             } catch (error) {
@@ -35,7 +35,7 @@ function Matches() {
         const confirmacion = window.confirm('¿Estas seguro de que quieres eliminar esta partida?');
         if (confirmacion) {
             try {
-                await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches/${matchId}`, {
+                await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/matches/${matchId}`, {
                     method: 'DELETE',
                 });
                 setMatches(matches.filter((match) => match.id !== matchId));

@@ -19,7 +19,7 @@ function Lobbies() {
     useEffect(() => {
         const fetchLobbies = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies`);
+                const response = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/lobbies`);
                 const data = await response.json();
                 setLobbies(data);
             } catch (error) {
@@ -47,7 +47,7 @@ function Lobbies() {
     }
     const createLobby = async (formData) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies`, {
+            const response = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/lobbies`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -75,7 +75,7 @@ function Lobbies() {
     };
     const createMatch = async (lobby) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches`, {
+            const response = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/matches`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -99,7 +99,7 @@ function Lobbies() {
 
     const editLobby = async (lobby, formData) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies/${lobby.id}`, {
+            const response = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/lobbies/${lobby.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -120,7 +120,7 @@ function Lobbies() {
         const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar esta sala?');
         if (confirmacion) {
             try {
-                await fetch(`http://localhost:8080/api/v1/admin/${adminId}/lobbies/${lobbyId}`, {
+                await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/lobbies/${lobbyId}`, {
                     method: 'DELETE',
                 });
                 setLobbies(lobbies.filter((lobby) => lobby.id !== lobbyId));

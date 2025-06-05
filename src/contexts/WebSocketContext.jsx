@@ -13,7 +13,7 @@ export const WebSocketProvider = ({ children }) => {
           socketRef.current.close();
         }
       
-        const socket = new WebSocket(`ws://localhost:8080/api/v1/ws-matches?match=${matchId}`);
+        const socket = new WebSocket(`wss://party-scape-be.onrender.com/api/v1/ws-matches?match=${matchId}`);
         socketRef.current = socket;
       
         socket.onopen = () => {

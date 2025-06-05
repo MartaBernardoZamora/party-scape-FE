@@ -16,7 +16,7 @@ function JoinMatch() {
 
   const handleClickPartidas = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches?code=${code}`);
+      const response = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/matches?code=${code}`);
 
       if (!response.ok) {
         alert("No se encontró la partida con ese código");

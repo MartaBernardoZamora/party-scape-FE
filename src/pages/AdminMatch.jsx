@@ -17,7 +17,7 @@ function AdminMatch() {
     useEffect(() => {
         const fetchMatch = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches/${matchId}`);
+                const response = await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/matches/${matchId}`);
                 const data = await response.json();
                 setMatch(data);
             } catch (error) {
@@ -104,7 +104,7 @@ function AdminMatch() {
     
                 body.results = completeResults;
             }
-            await fetch(`http://localhost:8080/api/v1/admin/${adminId}/matches/${matchId}`, {
+            await fetch(`https://party-scape-be.onrender.com/api/v1/admin/${adminId}/matches/${matchId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
