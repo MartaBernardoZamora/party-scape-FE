@@ -4,6 +4,7 @@ import mkcert from 'vite-plugin-mkcert'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/party-scape-FE/',
   plugins: [react(), mkcert()],
   server: {
     https: true
